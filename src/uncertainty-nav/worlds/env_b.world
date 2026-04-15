@@ -1,6 +1,21 @@
 <?xml version="1.0" ?>
 <!--
   Environment B — TurtleBot3 Waffle Pi test world (NEVER seen during training).
+
+    Sensor: LDS-01 laser with degraded conditions
+    - 360 beams, 360° FoV, range 0.12–3.5 m
+    - Gaussian noise std = 0.05 m (5× harder than Env A)
+    - Occlusion forcing applied in software (nav_env.py / agent node)
+
+  Differences from Env A (same arena size, different everything else):
+    - Interior walls creating occlusion corridors
+    - Different obstacle positions and shapes
+    - 2 moving actors (dynamic obstacles)
+    - Fog for visual degradation
+    - Higher laser noise std in the LDS-01 plugin
+
+  TurtleBot3 spawned at origin facing +X (same as Env A).
+
 -->
 
 <sdf version="1.6">
