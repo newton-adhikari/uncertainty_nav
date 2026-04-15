@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/
+*.so
+
+# ROS 2 build artifacts
+install/
+log/
+build/
+
+# PyTorch
+*.pt
+!checkpoints/*.pt
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TensorBoard
+runs/
+
+# Logs
+*.log
+logs/
+
+# Compiled LaTeX
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.bbl
+paper/*.blg
+paper/*.synctex.gz
+paper/*.fls
+paper/*.fdb_latexmk
+
+# Zone identifiers (Windows)
+*:Zone.Identifier
+
+# Large files
+*.zip
