@@ -1,0 +1,198 @@
+<?xml version="1.0" ?>
+<!--
+  Environment B — TurtleBot3 Waffle Pi test world (NEVER seen during training).
+
+  Sensor: LDS-01 laser with degraded conditions
+    - 360 beams, 360° FoV, range 0.12–3.5 m
+    - Gaussian noise std = 0.05 m (5× harder than Env A)
+    - Occlusion forcing applied in software (nav_env.py / agent node)
+
+  Differences from Env A (same arena size, different everything else):
+    - Interior walls creating occlusion corridors
+    - Different obstacle positions and shapes
+    - 2 moving actors (dynamic obstacles)
+    - Fog for visual degradation
+    - Higher laser noise std in the LDS-01 plugin
+
+  TurtleBot3 spawned at origin facing +X (same as Env A).
+-->
+<sdf version="1.6">
+  <world name="env_b">
+
+    <include><uri>model://ground_plane</uri></include>
+
+    <light name="sun" type="directional">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <direction>-0.5 0.5 -1</direction>
+    </light>
+
+    <!-- Fog — mild visual degradation (does not affect laser) -->
+    <scene>
+      <ambient>0.8 0.8 0.8 1</ambient>
+      <background>0.9 0.9 0.95 1</background>
+      <fog>
+        <type>linear</type>
+        <color>0.9 0.9 0.9 1</color>
+        <density>0.05</density>
+        <start>8.0</start>
+        <end>25.0</end>
+      </fog>
+    </scene>
+
+    <physics type="ode">
+      <real_time_update_rate>1000</real_time_update_rate>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+    </physics>
+
+    <!-- ── Boundary walls (same 10×10 m arena) ──────────────────────── -->
+    <model name="wall_north"><static>true</static><pose>0 5 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>10.2 0.2 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>10.2 0.2 1</size></box></geometry>
+          <material><script><name>Gazebo/DarkGrey</name></script></material></visual>
+      </link></model>
+
+    <model name="wall_south"><static>true</static><pose>0 -5 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>10.2 0.2 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>10.2 0.2 1</size></box></geometry>
+          <material><script><name>Gazebo/DarkGrey</name></script></material></visual>
+      </link></model>
+
+    <model name="wall_east"><static>true</static><pose>5 0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.2 10.2 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.2 10.2 1</size></box></geometry>
+          <material><script><name>Gazebo/DarkGrey</name></script></material></visual>
+      </link></model>
+
+    <model name="wall_west"><static>true</static><pose>-5 0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.2 10.2 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.2 10.2 1</size></box></geometry>
+          <material><script><name>Gazebo/DarkGrey</name></script></material></visual>
+      </link></model>
+
+    <!-- ── Interior walls (occlusion corridors — not in Env A) ───────── -->
+    <!-- Horizontal corridor wall: creates a blind zone behind it -->
+    <model name="interior_wall_h"><static>true</static><pose>0.5 1.5 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>4.0 0.15 1.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>4.0 0.15 1.0</size></box></geometry>
+          <material><script><name>Gazebo/WoodFloor</name></script></material></visual>
+      </link></model>
+
+    <!-- Vertical corridor wall -->
+    <model name="interior_wall_v"><static>true</static><pose>3.0 -1.0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.15 3.0 1.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.15 3.0 1.0</size></box></geometry>
+          <material><script><name>Gazebo/WoodFloor</name></script></material></visual>
+      </link></model>
+
+    <!-- ── Static obstacles (different layout from Env A) ────────────── -->
+    <model name="obs_1"><static>true</static><pose>-1.5 -3.5 0.5 0 0 0.5</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.6 0.3 1.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.6 0.3 1.0</size></box></geometry>
+          <material><script><name>Gazebo/Red</name></script></material></visual>
+      </link></model>
+
+    <model name="obs_2"><static>true</static><pose>3.5 3.5 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><cylinder><radius>0.35</radius><length>1.0</length></cylinder></geometry></collision>
+        <visual name="vis"><geometry><cylinder><radius>0.35</radius><length>1.0</length></cylinder></geometry>
+          <material><script><name>Gazebo/Blue</name></script></material></visual>
+      </link></model>
+
+    <model name="obs_3"><static>true</static><pose>-4.0 2.5 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.4 0.8 1.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.4 0.8 1.0</size></box></geometry>
+          <material><script><name>Gazebo/Purple</name></script></material></visual>
+      </link></model>
+
+    <model name="obs_4"><static>true</static><pose>1.5 4.0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.5 0.5 1.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.5 0.5 1.0</size></box></geometry>
+          <material><script><name>Gazebo/Green</name></script></material></visual>
+      </link></model>
+
+    <model name="obs_5"><static>true</static><pose>-3.0 -4.0 0.5 0 0 0.3</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.7 0.3 1.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.7 0.3 1.0</size></box></geometry>
+          <material><script><name>Gazebo/Orange</name></script></material></visual>
+      </link></model>
+
+    <!-- ── Dynamic obstacles (moving actors) ─────────────────────────── -->
+    <!--
+      Gazebo actors with scripted trajectories.
+      These create moving obstacles the TurtleBot3 laser will detect.
+      Collision is handled by the actor plugin — the laser sees them as
+      real obstacles because they have collision geometry.
+    -->
+    <actor name="dynamic_obs_1">
+      <pose>1.0 -1.0 0.0 0 0 0</pose>
+      <skin>
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walking">
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <plugin name="actor1_plugin" filename="libgazebo_ros_actor_command.so">
+        <ros><namespace>/actor1</namespace></ros>
+      </plugin>
+      <script>
+        <loop>true</loop>
+        <delay_start>0.0</delay_start>
+        <auto_start>true</auto_start>
+        <trajectory id="0" type="walking">
+          <waypoint><time>0.0</time><pose> 1.0 -1.0 0 0 0  0.0</pose></waypoint>
+          <waypoint><time>3.0</time><pose> 1.0  1.5 0 0 0  1.57</pose></waypoint>
+          <waypoint><time>6.0</time><pose>-1.0  1.5 0 0 0  3.14</pose></waypoint>
+          <waypoint><time>9.0</time><pose>-1.0 -1.0 0 0 0 -1.57</pose></waypoint>
+          <waypoint><time>12.0</time><pose> 1.0 -1.0 0 0 0  0.0</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <actor name="dynamic_obs_2">
+      <pose>-2.0 0.0 0.0 0 0 0</pose>
+      <skin>
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name="walking">
+        <filename>walk.dae</filename>
+        <scale>1.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <script>
+        <loop>true</loop>
+        <delay_start>1.0</delay_start>
+        <auto_start>true</auto_start>
+        <trajectory id="0" type="walking">
+          <waypoint><time>0.0</time><pose>-2.0 -3.5 0 0 0  1.57</pose></waypoint>
+          <waypoint><time>5.0</time><pose>-2.0  3.5 0 0 0  1.57</pose></waypoint>
+          <waypoint><time>10.0</time><pose>-2.0 -3.5 0 0 0 -1.57</pose></waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <!--
+      TurtleBot3 Waffle Pi spawned by launch file via spawn_entity.
+      LDS-01 plugin inside URDF publishes /scan with noise std=0.05
+      (set via TURTLEBOT3_LASER_NOISE_STD env var in launch file).
+    -->
+
+  </world>
+</sdf>

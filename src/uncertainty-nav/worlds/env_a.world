@@ -1,0 +1,134 @@
+<?xml version="1.0" ?>
+<!--
+  Environment A — TurtleBot3 Waffle Pi training world.
+
+  Sensor: LDS-01 laser (real TurtleBot3 spec)
+    - 360 beams, 360° FoV, range 0.12–3.5 m
+    - Gaussian noise std = 0.01 m (moderate, matches real LDS-01)
+    - No dynamic obstacles, no occlusion forcing
+
+  Arena: 10×10 m, 8 static box/cylinder obstacles.
+  TurtleBot3 spawned at origin facing +X.
+-->
+<sdf version="1.6">
+  <world name="env_a">
+
+    <include><uri>model://ground_plane</uri></include>
+
+    <light name="sun" type="directional">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <direction>-0.5 0.5 -1</direction>
+    </light>
+
+    <!-- ── Physics ─────────────────────────────────────────────── -->
+    <physics type="ode">
+      <real_time_update_rate>1000</real_time_update_rate>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+    </physics>
+
+    <!-- ── Boundary walls (10×10 m arena) ──────────────────────── -->
+    <model name="wall_north"><static>true</static><pose>0 5 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>10.2 0.2 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>10.2 0.2 1</size></box></geometry>
+          <material><script><uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name></script></material></visual>
+      </link></model>
+
+    <model name="wall_south"><static>true</static><pose>0 -5 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>10.2 0.2 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>10.2 0.2 1</size></box></geometry>
+          <material><script><uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name></script></material></visual>
+      </link></model>
+
+    <model name="wall_east"><static>true</static><pose>5 0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.2 10.2 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.2 10.2 1</size></box></geometry>
+          <material><script><uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name></script></material></visual>
+      </link></model>
+
+    <model name="wall_west"><static>true</static><pose>-5 0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.2 10.2 1</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.2 10.2 1</size></box></geometry>
+          <material><script><uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name></script></material></visual>
+      </link></model>
+
+    <!-- ── Static obstacles ─────────────────────────────────────── -->
+    <!-- Placed away from origin (TurtleBot3 spawn) and from each other -->
+    <model name="obs_1"><static>true</static><pose>2.0  1.5 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.5 0.5 1.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.5 0.5 1.0</size></box></geometry>
+          <material><script><name>Gazebo/Red</name></script></material></visual>
+      </link></model>
+
+    <model name="obs_2"><static>true</static><pose>-2.0  2.0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.5 0.5 1.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.5 0.5 1.0</size></box></geometry>
+          <material><script><name>Gazebo/Green</name></script></material></visual>
+      </link></model>
+
+    <model name="obs_3"><static>true</static><pose>1.5 -2.5 0.5 0 0 0.785</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.8 0.3 1.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.8 0.3 1.0</size></box></geometry>
+          <material><script><name>Gazebo/Blue</name></script></material></visual>
+      </link></model>
+
+    <model name="obs_4"><static>true</static><pose>-3.0 -1.5 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><cylinder><radius>0.3</radius><length>1.0</length></cylinder></geometry></collision>
+        <visual name="vis"><geometry><cylinder><radius>0.3</radius><length>1.0</length></cylinder></geometry>
+          <material><script><name>Gazebo/Yellow</name></script></material></visual>
+      </link></model>
+
+    <model name="obs_5"><static>true</static><pose>3.5 -3.0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.4 0.4 1.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.4 0.4 1.0</size></box></geometry>
+          <material><script><name>Gazebo/Purple</name></script></material></visual>
+      </link></model>
+
+    <model name="obs_6"><static>true</static><pose>-1.5  3.5 0.5 0 0 0.3</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>1.0 0.2 1.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>1.0 0.2 1.0</size></box></geometry>
+          <material><script><name>Gazebo/Turquoise</name></script></material></visual>
+      </link></model>
+
+    <model name="obs_7"><static>true</static><pose>-3.5  3.0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><cylinder><radius>0.25</radius><length>1.0</length></cylinder></geometry></collision>
+        <visual name="vis"><geometry><cylinder><radius>0.25</radius><length>1.0</length></cylinder></geometry>
+          <material><script><name>Gazebo/Orange</name></script></material></visual>
+      </link></model>
+
+    <model name="obs_8"><static>true</static><pose>4.0  2.5 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.3 0.6 1.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>0.3 0.6 1.0</size></box></geometry>
+          <material><script><name>Gazebo/SkyBlue</name></script></material></visual>
+      </link></model>
+
+    <!-- ── TurtleBot3 Waffle Pi ──────────────────────────────────── -->
+    <!--
+      Spawned at origin. The launch file will use gazebo_ros spawn_entity
+      to load the URDF from the turtlebot3_description package.
+      The LDS-01 plugin inside the URDF publishes /scan with:
+        samples: 360, min_angle: 0, max_angle: 6.28318, range_max: 3.5
+        noise type: gaussian, mean: 0, stddev: 0.01
+    -->
+
+  </world>
+</sdf>

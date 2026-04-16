@@ -1,0 +1,15 @@
+# Ensemble: train 5 independent members with different seeds.
+# Each member is a PolicyNetwork trained via standard PPO.
+# Assembly into DeepEnsemble happens at evaluation time.
+#
+# This file trains member 0. Members 1-4 are in train_ensemble_m{1-4}.yaml.
+policy_type: "ensemble_member"
+env: "A"
+seed: 0
+hidden: 256
+lr: 3.0e-4
+total_steps: 2_000_000
+n_steps: 2048
+log_dir: "runs/ensemble_m0"
+output_dir: "checkpoints"
+checkpoint_name: "ensemble_m0"
