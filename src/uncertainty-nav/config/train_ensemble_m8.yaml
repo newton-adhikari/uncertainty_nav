@@ -1,0 +1,10 @@
+policy_type: "ensemble_member"
+env: "A"
+seed: 8
+hidden: 256
+lr: 3.0e-4
+total_steps: 2_000_000
+n_steps: 2048
+log_dir: "runs/ensemble_m8"
+output_dir: "checkpoints"
+checkpoint_name: "ensemble_m8"
