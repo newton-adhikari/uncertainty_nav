@@ -117,19 +117,100 @@ def _save(data, path):
 
 
 def ablation_size_vs_uncertainty(device, output_dir="experiments/results"):
-    pass
+    # Ablation 1: Ensemble(N=5) vs LargeMLPPolicy (same param count)
+    env = PartialObsNavEnv(ENV_B)
+    obs_dim, act_dim = env.observation_space.shape[0], env.action_space.shape[0]
+
+    results, raw = {}, {}
+    # Ensemble
+    ens = _load_ensemble(5, device)
+    if ens:
+        sr = run_episodes(ENV_B, ens, "ensemble", device)
+        results["ensemble_5"] = compute_stats(sr)
+        raw["ensemble_5"] = sr
+        print(f"[Ablation 1] ensemble_5: SR={results['ensemble_5']['success_rate']:.3f} "
+              f"± {results['ensemble_5']['success_rate_std']:.3f}")
+
+    # Large MLP
+    lmlp = _load_baseline(LargeMLPPolicy, f"{CHECKPOINT_DIR}/large_mlp_policy.pt",
+                           obs_dim, act_dim, device)
+    if lmlp:
+        sr = run_episodes(ENV_B, lmlp, "large_mlp", device)
+        results["large_mlp"] = compute_stats(sr)
+        raw["large_mlp"] = sr
+        print(f"[Ablation 1] large_mlp: SR={results['large_mlp']['success_rate']:.3f} "
+              f"± {results['large_mlp']['success_rate_std']:.3f}")
+
+    if "ensemble_5" in raw and "large_mlp" in raw:
+        try:
+            p = mann_whitney_test(raw["ensemble_5"], raw["large_mlp"])
+            results["mann_whitney_p_value"] = p
+            print(f"[Ablation 1] Mann-Whitney p={p:.4f}")
+        except ImportError:
+            pass
+
+    _save(results, f"{output_dir}/ablation_size_vs_uncertainty.json")
 
 
 def ablation_uncertainty_action_vs_mean(device, output_dir="experiments/results"):
-    pass
+    # Ablation 2: Uncertainty-driven action vs mean-only
+    ens = _load_ensemble(5, device)
+    if not ens:
+        return
+
+    results, raw = {}, {}
+    for use_unc, name in [(True, "uncertainty_driven"), (False, "mean_only")]:
+        sr = run_episodes(ENV_B, ens, "ensemble", device, use_uncertainty_action=use_unc)
+        results[name] = compute_stats(sr)
+        raw[name] = sr
+        print(f"[Ablation 2] {name}: SR={results[name]['success_rate']:.3f} "
+              f"± {results[name]['success_rate_std']:.3f}")
+
+    if "uncertainty_driven" in raw and "mean_only" in raw:
+        try:
+            p = mann_whitney_test(raw["uncertainty_driven"], raw["mean_only"])
+            results["mann_whitney_p_value"] = p
+            print(f"[Ablation 2] Mann-Whitney p={p:.4f}")
+        except ImportError:
+            pass
+
+    _save(results, f"{output_dir}/ablation_uncertainty_action.json")
 
 
 def ablation_ensemble_size(device, output_dir="experiments/results"):
-    pass
+    # Ablation 3: N=1,2,3,5,10 using subsets of independently trained members
+    results = {}
+    for n in [1, 2, 3, 5, 10]:
+        ens = _load_ensemble(n, device)
+        if not ens:
+            results[f"N={n}"] = {"status": "missing_checkpoints"}
+            print(f"[Ablation 3] N={n}: SKIPPED")
+            continue
+        sr = run_episodes(ENV_B, ens, "ensemble", device)
+        stats = compute_stats(sr)
+        results[f"N={n}"] = stats
+        print(f"[Ablation 3] N={n}: SR={stats['success_rate']:.3f} "
+              f"± {stats['success_rate_std']:.3f} "
+              f"unc={stats['mean_uncertainty']:.4f}")
+
+    _save(results, f"{output_dir}/ablation_ensemble_size.json")
 
 
 def ablation_threshold_sensitivity(device, output_dir="experiments/results"):
-    pass
+    # Ablation 4: Threshold sensitivity
+    ens = _load_ensemble(5, device)
+    if not ens:
+        return
+
+    results = {}
+    for threshold in [0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1.0]:
+        sr = run_episodes(ENV_B, ens, "ensemble", device, threshold=threshold)
+        stats = compute_stats(sr)
+        results[f"t={threshold}"] = stats
+        print(f"[Ablation 4] threshold={threshold}: SR={stats['success_rate']:.3f} "
+              f"cautious={stats['cautious_ratio']:.3f}")
+
+    _save(results, f"{output_dir}/ablation_threshold.json")
 
 
 if __name__ == "__main__":
