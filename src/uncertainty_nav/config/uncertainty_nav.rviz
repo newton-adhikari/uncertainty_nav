@@ -1,0 +1,83 @@
+Panels:
+  - Class: rviz_common/Displays
+    Help Height: 78
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /LaserScan1
+        - /MarkerArray1
+      Splitter Ratio: 0.5
+    Tree Height: 617
+  - Class: rviz_common/Selection
+    Name: Selection
+  - Class: rviz_common/Tool Properties
+    Name: Tool Properties
+  - Class: rviz_common/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz_default_plugins/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Name: Grid
+    - Class: rviz_default_plugins/LaserScan
+      Color: 255; 0; 0
+      Enabled: true
+      Name: LaserScan
+      Size (m): 0.05
+      Topic:
+        Value: /scan
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: UncertaintyMarkers
+      Topic:
+        Value: /uncertainty_heatmap
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: UncertaintyAgent
+      Topic:
+        Value: /uncertainty_marker
+    - Class: rviz_default_plugins/PoseArray
+      Color: 0; 170; 255
+      Enabled: true
+      Name: ParticleCloud
+      Topic:
+        Value: /particle_cloud
+    - Class: rviz_default_plugins/Odometry
+      Enabled: true
+      Name: RobotOdom
+      Topic:
+        Value: /odom
+    - Class: rviz_default_plugins/Path
+      Color: 0; 255; 100
+      Enabled: true
+      Name: RobotPath
+      Topic:
+        Value: /robot_path
+    - Class: rviz_default_plugins/Marker
+      Enabled: true
+      Name: GoalMarker
+      Topic:
+        Value: /goal_marker
+    - Class: rviz_default_plugins/RobotModel
+      Enabled: true
+      Name: RobotModel
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: odom
+  Tools:
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/SetGoal
+      Topic: /goal_pose
+  Value: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/TopDownOrtho
+      Scale: 80
+      X: 0
+      Y: 0

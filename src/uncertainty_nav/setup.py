@@ -21,7 +21,9 @@ setup(
     zip_safe=True,
     entry_points={
         'console_scripts': [
-            
+            'uncertainty_agent = uncertainty_nav.uncertainty_agent_node:main',
+            'particle_filter   = uncertainty_nav.particle_filter_node:main',
+            'rviz_uncertainty   = uncertainty_nav.rviz_uncertainty_node:main',
         ],
     },
 )
