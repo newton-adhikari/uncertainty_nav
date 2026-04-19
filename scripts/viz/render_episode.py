@@ -110,3 +110,8 @@ def run_episode_trace(env, policy, policy_type, device, threshold=0.5):
     trace["collision"] = info.get("collision", False)
     trace["n_steps"] = len(trace["robot_x"])
     return trace
+
+# to render static snapshot
+def render_snapshot():
+    # Render a single frame or full trajectory as a figure
+    pass
