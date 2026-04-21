@@ -1,0 +1,46 @@
+{
+  "A": {
+    "raw_ece": 0.1205848025988165,
+    "optimal_temperature": 9.999993088304656,
+    "calibrated_ece": 0.48958244850679183,
+    "ece_reduction_pct": -306.0067586921579,
+    "auroc": 1.0,
+    "n_episodes": 500,
+    "n_cal": 250,
+    "n_test": 250,
+    "failure_rate": 0.01
+  },
+  "B": {
+    "raw_ece": 0.40614653282429003,
+    "optimal_temperature": 1.1665931080324812,
+    "calibrated_ece": 0.25096587227762834,
+    "ece_reduction_pct": 38.208047590005414,
+    "auroc": 0.9599578503688093,
+    "n_episodes": 500,
+    "n_cal": 250,
+    "n_test": 250,
+    "failure_rate": 0.608
+  },
+  "C": {
+    "raw_ece": 0.20050049612648738,
+    "optimal_temperature": 9.999994793574977,
+    "calibrated_ece": 0.41805949453835123,
+    "ece_reduction_pct": -108.50796013722328,
+    "auroc": 0.960282803077563,
+    "n_episodes": 500,
+    "n_cal": 250,
+    "n_test": 250,
+    "failure_rate": 0.094
+  },
+  "D": {
+    "raw_ece": 0.3644590475208734,
+    "optimal_temperature": 0.23925619145182875,
+    "calibrated_ece": 0.06801756819016987,
+    "ece_reduction_pct": 81.33739067452446,
+    "auroc": 0.9551282051282052,
+    "n_episodes": 500,
+    "n_cal": 250,
+    "n_test": 250,
+    "failure_rate": 0.522
+  }
+}
