@@ -220,6 +220,10 @@ if __name__ == "__main__":
     print("=" * 60)
     ablation_size_vs_uncertainty(device)
     ablation_uncertainty_action_vs_mean(device)
-    ablation_ensemble_size(device)
+
+    # NOTE: we have updated :
+    # ensemble size ablation is produced separately 
+    # evaluate_all_envs.py --auroc_ablation → ensemble_size_auroc.json
+
     ablation_threshold_sensitivity(device)
     print("\nAll ablations complete.")
