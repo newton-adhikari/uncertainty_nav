@@ -172,6 +172,10 @@ def evaluate(policy_type, env_name, checkpoint, n_episodes=200, n_seeds=5,
                 calibration[f"q{b}_n"] = int(mask.sum())
         metrics["uncertainty_calibration"] = calibration
 
+        # Per-episode arrays for bootstrap CI computation
+        metrics["per_episode_uncertainty"] = [float(u) for u in uncs]
+        metrics["per_episode_success"] = [int(s) for s in successes]
+
         # AUROC
         try:
             from sklearn.metrics import roc_auc_score
@@ -220,9 +224,15 @@ def evaluate(policy_type, env_name, checkpoint, n_episodes=200, n_seeds=5,
         robustness = {}
         for noise in noise_levels:
             noisy_cfg = EnvConfig(
+                map_size=env_cfg.map_size,
                 laser_noise_std=noise,
                 occlusion_prob=env_cfg.occlusion_prob,
                 fov_deg=env_cfg.fov_deg,
+                n_static_obstacles=env_cfg.n_static_obstacles,
+                n_dynamic_obstacles=env_cfg.n_dynamic_obstacles,
+                dynamic_speed=env_cfg.dynamic_speed,
+                interior_walls=env_cfg.interior_walls,
+                max_steps=env_cfg.max_steps,
             )
             noisy_env = PartialObsNavEnv(noisy_cfg)
             eps = [run_episode(noisy_env, policy, policy_type, device) for _ in range(50)]
