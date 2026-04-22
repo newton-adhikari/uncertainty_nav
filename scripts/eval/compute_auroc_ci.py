@@ -23,3 +23,11 @@ def bootstrap_auroc(uncertainties, failures, n_bootstrap=1000, ci=0.95):
     lo = aurocs[int((1 - ci) / 2 * len(aurocs))]
     hi = aurocs[int((1 + ci) / 2 * len(aurocs))]
     return float(lo), float(hi), float(np.mean(aurocs))
+
+for method, label in [("mc_dropout_T20", "MC-Dropout T=20"), ("ensemble", "Ensemble")]:
+    path = f"experiments/results/{method}_envB.json"
+    with open(path) as f:
+        d = json.load(f)
+    cal = d["uncertainty_calibration"]
+
+    # Reconstruct per-episode data from quartiles
